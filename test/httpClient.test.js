@@ -1,35 +1,17 @@
 const { expect, assert } = require('chai');
 const { describe, it, before, after } = require('mocha');
 const { requestTest, requestHello } = require('../src/httpClient');
-const Docker = require('dockerode');
-
-let containerId;
-const docker = new Docker();
+const dockerodeFacade = require('./utils/infra/dockerodeFacade');
 
 describe('REST API', () => {
-  before((done) => {
-    // await docker.run('chentex/go-rest-api', process.stdout, {Tty: false, ExposedPorts: {'8080/tcp': {}}, PortBindings: {'8080/tcp': [{'HostPort': '8080'}]}});
+  let containerId;
 
+  before((done) => {
     // docker.pull('chentex/go-rest-api')
 
-    docker.createContainer(
-      {
-        Image: 'chentex/go-rest-api',
-        name: 'int-test-co',
-        Tty: true,
-        ExposedPorts: { '8080/tcp': {} },
-        PortBindings: { '8080/tcp': [{ HostPort: '8080' }] }
-      },
-      (err, container) => {
-        if (err) {
-          done(err);
-        }
-        containerId = container.id;
-        console.log(`created container with id ${containerId}`);
-        container.start((err, data) => {
-          done();
-        });
-      }
+    dockerodeFacade.createAndStartContainer(
+      done,
+      (contId) => (containerId = contId)
     );
   });
 
@@ -46,7 +28,7 @@ describe('REST API', () => {
   it('should return a greeting with the name passed to the request on the "Hello" endpoint', () => {
     requestHello('Mocha')
       .then((data) => {
-          expect(data.body.message).to.be.equal('Hola Mocha');
+        expect(data.body.message).to.be.equal('Hola Mocha');
       })
       .catch((err) => {
         assert.fail('expected', 'actual', err);
@@ -54,18 +36,6 @@ describe('REST API', () => {
   });
 
   after((done) => {
-    let container = docker.getContainer(containerId);
-    container.stop((err, data) => {
-      if (err) {
-        console.error(`container with id ${container.id} coulnd't be stopped`);
-      }
-      container.remove((err, data) => {
-        console.log(`container with id ${container.id} is removed`);
-        if (err) {
-          done(err);
-        }
-        done();
-      });
-    });
+    dockerodeFacade.stopAndRemoveContainer(done, containerId);
   });
 });
