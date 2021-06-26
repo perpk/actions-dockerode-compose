@@ -2,6 +2,20 @@ const Docker = require('dockerode');
 
 const docker = new Docker();
 
+const pullImageAndSpawnContainer = (callback, setContainerId) => {
+    docker.pull('chentex/go-rest-api', (err, stream) => {
+        docker.modem.followProgress(stream, onFinished);
+
+        function onFinished(err, _) {
+            if (err) {
+                callback(err);
+                throw err;
+            }
+            createAndStartContainer(callback, setContainerId);
+        }
+    });
+}
+
 const createAndStartContainer = (callback, setContainerId) => {
   docker.createContainer(
     {
@@ -40,4 +54,4 @@ const stopAndRemoveContainer = (callback, containerId) => {
   });
 };
 
-module.exports = { createAndStartContainer, stopAndRemoveContainer };
+module.exports = { pullImageAndSpawnContainer, stopAndRemoveContainer };

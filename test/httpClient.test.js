@@ -3,13 +3,16 @@ const { describe, it, before, after } = require('mocha');
 const { requestTest, requestHello } = require('../src/httpClient');
 const dockerodeFacade = require('./utils/infra/dockerodeFacade');
 
+// before(function(done) {
+//   dockerodeFacade.pullImage(done);
+// });
+
 describe('REST API', () => {
   let containerId;
 
-  before((done) => {
-    // docker.pull('chentex/go-rest-api')
-
-    dockerodeFacade.createAndStartContainer(
+  before(function (done) {
+    this.timeout(60000);
+    dockerodeFacade.pullImageAndSpawnContainer(
       done,
       (contId) => (containerId = contId)
     );
@@ -35,7 +38,8 @@ describe('REST API', () => {
       });
   });
 
-  after((done) => {
+  after(function (done) {
+    this.timeout(20000);
     dockerodeFacade.stopAndRemoveContainer(done, containerId);
   });
 });
