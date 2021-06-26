@@ -1,0 +1,29 @@
+{
+  "name": "actions-dockerode-compose",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "test:watch": "mocha --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/perpk/actions-dockerode-compose.git"
+  },
+  "author": "perpk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/perpk/actions-dockerode-compose/issues"
+  },
+  "homepage": "https://github.com/perpk/actions-dockerode-compose#readme",
+  "dependencies": {
+    "got": "^11.8.2"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "dockerode": "^3.3.0",
+    "dockerode-compose": "^1.2.1",
+    "mocha": "^9.0.1"
+  }
+}
