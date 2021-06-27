@@ -3,10 +3,6 @@ const { describe, it, before, after } = require('mocha');
 const { requestTest, requestHello } = require('../../src/httpClient');
 const dockerodeFacade = require('../utils/infra/dockerodeFacade');
 
-// before(function(done) {
-//   dockerodeFacade.pullImage(done);
-// });
-
 describe('REST API', () => {
   let containerId;
 
