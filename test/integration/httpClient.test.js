@@ -1,7 +1,7 @@
 const { expect, assert } = require('chai');
 const { describe, it, before, after } = require('mocha');
-const { requestTest, requestHello } = require('../src/httpClient');
-const dockerodeFacade = require('./utils/infra/dockerodeFacade');
+const { requestTest, requestHello } = require('../../src/httpClient');
+const dockerodeFacade = require('../utils/infra/dockerodeFacade');
 
 // before(function(done) {
 //   dockerodeFacade.pullImage(done);
