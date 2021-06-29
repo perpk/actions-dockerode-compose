@@ -7,8 +7,6 @@ require('dotenv').config()
 const gh_username = process.env.GH_USER;
 const gh_token = process.env.GH_TOKEN;
 
-console.log(gh_username);
-
 describe('REST API', () => {
   let containerId;
 
