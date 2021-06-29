@@ -2,24 +2,32 @@ const Docker = require('dockerode');
 
 const docker = new Docker();
 
-const pullImageAndSpawnContainer = (callback, setContainerId) => {
-    docker.pull('chentex/go-rest-api', (err, stream) => {
-        docker.modem.followProgress(stream, onFinished);
+const pullImageAndSpawnContainer = (callback, setContainerId, auth) => {
+  docker.pull(
+    'docker.pkg.github.com/copiepie/chentex/go-rest-api',
+    { authconfig: auth },
+    (err, stream) => {
+      if (err) {
+        callback(err);
+        throw err;
+      }
+      docker.modem.followProgress(stream, onFinished);
 
-        function onFinished(err, _) {
-            if (err) {
-                callback(err);
-                throw err;
-            }
-            createAndStartContainer(callback, setContainerId);
+      function onFinished(err, _) {
+        if (err) {
+          callback(err);
+          throw err;
         }
-    });
-}
+        createAndStartContainer(callback, setContainerId);
+      }
+    }
+  );
+};
 
 const createAndStartContainer = (callback, setContainerId) => {
   docker.createContainer(
     {
-      Image: 'chentex/go-rest-api',
+      Image: 'docker.pkg.github.com/copiepie/chentex/go-rest-api',
       name: 'int-test-co',
       Tty: true,
       ExposedPorts: { '8080/tcp': {} },

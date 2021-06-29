@@ -25,6 +25,7 @@
     "chai": "^4.3.4",
     "dockerode": "^3.3.0",
     "dockerode-compose": "^1.2.1",
+    "dotenv": "^10.0.0",
     "mocha": "^9.0.1"
   }
 }
