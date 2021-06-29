@@ -2,6 +2,12 @@ const { expect, assert } = require('chai');
 const { describe, it, before, after } = require('mocha');
 const { requestTest, requestHello } = require('../../src/httpClient');
 const dockerodeFacade = require('../utils/infra/dockerodeFacade');
+require('dotenv').config()
+
+const gh_username = process.env.GH_USER;
+const gh_token = process.env.GH_TOKEN;
+
+console.log(gh_username);
 
 describe('REST API', () => {
   let containerId;
@@ -10,7 +16,8 @@ describe('REST API', () => {
     this.timeout(60000);
     dockerodeFacade.pullImageAndSpawnContainer(
       done,
-      (contId) => (containerId = contId)
+      (contId) => (containerId = contId),
+      {username: gh_username, password: gh_token}
     );
   });
 
